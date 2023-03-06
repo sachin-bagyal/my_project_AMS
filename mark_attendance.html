@@ -1,0 +1,93 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content%}
+
+
+        <!-- Content Start -->
+        <div class="content">
+ <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="{% static 'img/my.png' %}" alt="" style="width: 30px; height: 30px;">
+                            <span class="d-none d-lg-inline-flex">{{ request.user }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">My Profile</a>
+                            <a href="#" class="dropdown-item">Settings</a>
+                            <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+
+            <!-- Table Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Mark Attendance {{ request.session.visit_counter }}</h6>
+                            {% for message in messages %}
+                            
+                            <p class = 'flash-message'> 
+                                {{ message }}
+                            </p>  
+                            {% endfor %}
+                            <div class="table-responsive">
+                                <form action=" " class="was-validated" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                      <label for="uname">Username:</label>
+                                      <input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" value = '{{ username }}' required >
+                                      <div class="valid-feedback">Valid.</div>
+                                      <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="uname">Time_in:</label>
+                                        <input type="text" class="form-control" id="date_time" placeholder="Enter time" name="date_time" required readonly value = '{{ date_time }}' >
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                      </div>
+                                    
+                                      <div class="form-group">
+                                        <label for="uname">Time_out:</label>
+                                        <input type="text" class="form-control" id="date_time" placeholder="Enter time" name="date_time" required readonly value = '{{ date_time }}' >
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                      </div>
+                                    
+                                    {% if is_time_in == 'yes' and is_timed_out == 'no' %}
+                                        <button type="submit" class="btn btn-primary">Time Out</button>
+                                        <input type = "hidden" name = "user_action" value = "Time_out">
+                                        <input type = "hidden" name = "Attendance_id" value = "{{ attendance_id }}">
+                                    {% elif is_timed_out == 'yes' %}
+                                        <button type="submit" disabled="disabled" class="btn btn-primary">Timed Out</button>
+                                    {% else %} 
+                                        <input type = "hidden" name = "user_action" value = "Time_in">
+                                        <button type="submit" class="btn btn-primary">Time In</button>
+                                    {% endif %}
+                                  </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Table End -->
+
+           
+        
+       {% endblock %}
